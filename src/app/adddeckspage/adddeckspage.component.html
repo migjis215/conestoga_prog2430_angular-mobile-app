@@ -1,0 +1,52 @@
+<div class="m-4">
+  <div class="card">
+    <div class="card-header">
+      <h2>Add a Deck</h2>
+    </div>
+    <div class="card-body">
+      <form>
+        <div class="mb-3">
+          <label for="txtDeckName"class="form-label">Deck Name</label>
+          <input type="text" id="txtDeckName" name="txtDeckName"
+                 class="form-control" [(ngModel)]="deck.deckName" required>
+        </div>
+        <div class="mb-3">
+          <label for="txtFirstPokemonId"class="form-label">First Pokemon</label>
+          <select class="form-select" id="txtFirstPokemonId" name="txtFirstPokemonId"
+                  [(ngModel)]="deck.firstPokemonId" required>
+            <option *ngFor="let pokemon of pokemons" value="{{ pokemon.id }}">{{ pokemon.pokemonName }}</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="txtSecondPokemonId"class="form-label">Second Pokemon</label>
+          <select class="form-select" id="txtSecondPokemonId" name="txtSecondPokemonId"
+                  [(ngModel)]="deck.secondPokemonId" required>
+            <option *ngFor="let pokemon of pokemons" value="{{ pokemon.id }}">{{ pokemon.pokemonName }}</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="txtThirdPokemonId"class="form-label">Third Pokemon</label>
+          <select class="form-select" id="txtThirdPokemonId" name="txtThirdPokemonId"
+                  [(ngModel)]="deck.thirdPokemonId" required>
+            <option *ngFor="let pokemon of pokemons" value="{{ pokemon.id }}">{{ pokemon.pokemonName }}</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="txtItemId"class="form-label">Item</label>
+          <select class="form-select" id="txtItemId" name="txtItemId"
+                  [(ngModel)]="deck.itemId" required>
+            <option *ngFor="let item of items" value="{{ item.id }}">{{ item.itemName }}</option>
+          </select>
+        </div>
+
+        <button type="button"
+                id="btnAddDeck"
+                name="btnAddDeck"
+                class="btn btn-primary"
+                (click)="btnAddDeck_click()">
+          Add
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

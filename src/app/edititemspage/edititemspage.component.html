@@ -1,0 +1,29 @@
+<div class="m-4">
+  <div class="card">
+    <div class="card-header">
+      <h2>Edit an Item</h2>
+    </div>
+    <div class="card-body">
+      <form>
+        <div class="mb-3">
+          <label for="txtItemName"class="form-label">Item Name</label>
+          <input type="text" id="txtItemName" name="txtItemName"
+                 class="form-control" [(ngModel)]="item.itemName" required>
+        </div>
+        <div class="mb-3">
+          <label for="txtDescription"class="form-label">Description</label>
+          <textarea class="form-control" id="txtDescription" name="txtDescription"
+                    [(ngModel)]="item.description" required></textarea>
+        </div>
+
+        <button type="button"
+                id="btnUpdateItem"
+                name="btnUpdateItem"
+                class="btn btn-primary"
+                (click)="btnUpdateItem_click()">
+          Update
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

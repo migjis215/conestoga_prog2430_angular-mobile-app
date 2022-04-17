@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Pokemon } from "../models/pokemon.model";
 import { DatabaseService } from "../services/database.service";
 import {Router} from "@angular/router";
+import {AppComponent} from "../app.component";
 
 @Component({
   selector: 'app-addpokemonpage',
@@ -11,7 +12,7 @@ import {Router} from "@angular/router";
 
 export class AddpokemonpageComponent implements OnInit {
   pokemon: Pokemon = new Pokemon();
-  types: string[] = ['Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Psychic'];
+  types = AppComponent.types;
 
   constructor(private database: DatabaseService,
               private router: Router) { }
@@ -19,8 +20,8 @@ export class AddpokemonpageComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  btnAdd_click() {
-    this.database.insert(this.pokemon, () => {
+  btnAddPokemon_click() {
+    this.database.insertPokemon(this.pokemon, () => {
       console.log("Record added successfully");
       alert("Record added successfully");
       this.router.navigate(['pokemon'])

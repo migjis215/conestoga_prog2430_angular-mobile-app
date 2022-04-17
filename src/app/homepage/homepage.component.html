@@ -9,8 +9,8 @@
             <h5 class="card-title">Decks</h5>
             <p class="card-text">Choose Pokemon and an item to create your own deck.</p>
             <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-              <button type="button" class="btn btn-sm btn-outline-secondary">Add</button>
+              <a class="btn btn-sm btn-outline-secondary" routerLink="/decks">View</a>
+              <a class="btn btn-sm btn-outline-secondary" routerLink="/add-deck">Add</a>
             </div>
           </div>
         </div>
@@ -22,7 +22,7 @@
             <h5 class="card-title">Pokemon</h5>
             <p class="card-text">Add and manage Pokemon.</p>
             <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+              <a class="btn btn-sm btn-outline-secondary" routerLink="/pokemon">View</a>
               <a class="btn btn-sm btn-outline-secondary" routerLink="/add-pokemon">Add</a>
             </div>
           </div>
@@ -35,8 +35,8 @@
             <h5 class="card-title">Items</h5>
             <p class="card-text">Add items needed for the battle.</p>
             <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-              <button type="button" class="btn btn-sm btn-outline-secondary">Add</button>
+              <a class="btn btn-sm btn-outline-secondary" routerLink="/items">View</a>
+              <a class="btn btn-sm btn-outline-secondary" routerLink="/add-item">Add</a>
             </div>
           </div>
         </div>
@@ -48,12 +48,37 @@
             <h5 class="card-title">Records</h5>
             <p class="card-text">Record your battle and remember it.</p>
             <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-              <button type="button" class="btn btn-sm btn-outline-secondary">Add</button>
+              <a class="btn btn-sm btn-outline-secondary" routerLink="/records">View</a>
+              <a class="btn btn-sm btn-outline-secondary" routerLink="/add-record">Add</a>
             </div>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="m-4">
+  <div class="card">
+    <div class="card-header">
+      <h2>Settings</h2>
+    </div>
+    <div class="card-body">
+      <button class="btn btn-primary container-fluid mb-2"
+              id="btnCreateDatabase"
+              type="button"
+              name="btnCreateDatabase"
+              (click)="btnCreateDatabase_click()">
+        Create Database
+      </button>
+
+      <button class="btn btn-danger container-fluid"
+              id="btnClearDatabase"
+              type="button"
+              name="btnClearDatabase"
+              (click)="btnClearDatabase_click()">
+        Clear Database
+      </button>
     </div>
   </div>
 </div>

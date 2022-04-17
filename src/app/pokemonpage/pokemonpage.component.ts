@@ -15,21 +15,22 @@ export class PokemonpageComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit(): void {
-    this.database.selectAll()
+    this.database.selectAllPokemon()
       .then(data => {
         this.pokemons = data;
       })
       .catch(err => {
         console.error(err);
-      });
+      }
+    );
   }
 
-  btnModify_click(pokemon: Pokemon) {
-    this.router.navigate(['modify/' + pokemon.id]);
+  btnEditPokemon_click(pokemon: Pokemon) {
+    this.router.navigate(['edit-pokemon/' + pokemon.id]);
   }
 
-  btnDelete_click(pokemon: Pokemon) {
-    this.database.delete(pokemon, () => {
+  btnDeletePokemon_click(pokemon: Pokemon) {
+    this.database.deletePokemon(pokemon, () => {
       alert("Record deleted successfully");
     });
 

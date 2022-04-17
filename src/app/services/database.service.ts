@@ -1,5 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Pokemon} from "../models/pokemon.model";
+import {Item} from "../models/item.model";
+import {Deck} from "../models/deck.model";
 
 declare function openDatabase(shortName, version, displayName, dbSize, dbCreateSuccess): any;
 
@@ -31,52 +33,37 @@ export class DatabaseService {
       var sql: string = "";
       var options = [];
 
-      sql = "CREATE TABLE IF NOT EXISTS pokemon(" +
-        " id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-        " pokemon_name VARCHAR(20) NOT NULL," +
-        " type VARCHAR(10) NOT NULL, " +
-        " hp INTEGER);";
+      sql = `CREATE TABLE IF NOT EXISTS pokemon(
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        pokemon_name VARCHAR(20) NOT NULL,
+        type VARCHAR(10) NOT NULL,
+        hp INTEGER NOT NULL);`;
       tx.executeSql(sql, options, () => {
         console.info("Success: create pokemon table successful");
-      }, DatabaseService.errorHandler)
+      }, DatabaseService.errorHandler);
 
-      // sql = "CREATE TABLE IF NOT EXISTS type("
-      //   + "id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-      //   + "name VARCHAR(10) NOT NULL);";
-      // tx.executeSql(sql, options, () => {
-      //   console.info("Success: create type table successful");
-      // }, DatabaseService.errorHandler);
-      //
-      // sql = "INSERT INTO type(name) VALUES(?);";
-      // options = ['NORMAL'];
-      // tx.executeSql(sql, options, () => {
-      //   console.info("Success: row inserted successfully to type table");
-      // }, DatabaseService.errorHandler);
-      //
-      // options = ['FIRE'];
-      // tx.executeSql(sql, options, () => {
-      //   console.info("Success: row inserted successfully to type table");
-      // }, DatabaseService.errorHandler);
-      //
-      // options = ['WATER'];
-      // tx.executeSql(sql, options, () => {
-      //   console.info("Success: row inserted successfully to type table");
-      // }, DatabaseService.errorHandler);
-      //
-      // options = ['GRASS'];
-      // tx.executeSql(sql, options, () => {
-      //   console.info("Success: row inserted successfully to type table");
-      // }, DatabaseService.errorHandler);
-      //
-      // options = ['ELECTRIC'];
-      // tx.executeSql(sql, options, () => {
-      //   console.info("Success: row inserted successfully to type table");
-      // }, DatabaseService.errorHandler);
-      //
-      // options = ['PSYCHIC'];
-      // tx.executeSql(sql, options, () => {
-      //   console.info("Success: row inserted successfully to type table");
-      // }, DatabaseService.errorHandler);
+      sql = `CREATE TABLE IF NOT EXISTS items(
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        item_name VARCHAR(20) NOT NULL,
+        description VARCHAR(200) NOT NULL);`;
+      tx.executeSql(sql, options, () => {
+        console.info("Success: create items table successful");
+      }, DatabaseService.errorHandler);
+
+      sql = `CREATE TABLE IF NOT EXISTS decks(
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        deck_name VARCHAR(50) NOT NULL,
+        first_pokemon_id INTEGER NOT NULL,
+        second_pokemon_id INTEGER NOT NULL,
+        third_pokemon_id INTEGER NOT NULL,
+        item_id INTEGER NOT NULL,
+        FOREIGN KEY (first_pokemon_id) REFERENCES pokemon(id),
+        FOREIGN KEY (first_pokemon_id) REFERENCES pokemon(id),
+        FOREIGN KEY (first_pokemon_id) REFERENCES pokemon(id),
+        FOREIGN KEY (item_id) REFERENCES items(id));`;
+      tx.executeSql(sql, options, () => {
+        console.info("Success: create decks table successful");
+      }, DatabaseService.errorHandler)
     }
 
     this.getDatabase().transaction(txFunction, DatabaseService.errorHandler, () => {
@@ -86,8 +73,22 @@ export class DatabaseService {
 
   private dropTables(): void {
     function txFunction(tx: any): any {
-      var sql: string = "DROP TABLE IF EXISTS pokemon;";
+      var sql: string = "";
       var options = [];
+
+      sql = "DROP TABLE IF EXISTS decks;";
+
+      tx.executeSql(sql, options, () => {
+        console.info("Success: DROP table successful");
+      }, DatabaseService.errorHandler);
+
+      sql = "DROP TABLE IF EXISTS items;";
+
+      tx.executeSql(sql, options, () => {
+        console.info("Success: DROP table successful");
+      }, DatabaseService.errorHandler);
+
+      sql = "DROP TABLE IF EXISTS pokemon;";
 
       tx.executeSql(sql, options, () => {
         console.info("Success: DROP table successful");
@@ -126,8 +127,8 @@ export class DatabaseService {
     return this.db;
   }
 
-  // crud operations
-  public insert(pokemon: Pokemon, callback) {
+  // crud operations for pokemon
+  public insertPokemon(pokemon: Pokemon, callback) {
     function txFunction(tx: any) {
       var sql: string = 'INSERT INTO pokemon(pokemon_name, type, hp) VALUES(?, ?, ?);';
       var options = [pokemon.pokemonName, pokemon.type, pokemon.hp];
@@ -140,39 +141,35 @@ export class DatabaseService {
     });
   }
 
-  // public select(id: number): Promise<any> {
-  //   let options = [id];
-  //   let book: Book = null;
-  //
-  //   return new Promise((resolve, reject) => {
-  //     function txFunction(tx) {
-  //       let sql = "SELECT * FROM books WHERE id=?;";
-  //
-  //       tx.executeSql(sql, options, (tx, results) => {
-  //         if (results.rows.length > 0) {
-  //           // for (let i = 0; i < results.rows.length; i++) {
-  //           let row = results.rows[0];
-  //           book = new Book(row['name'], row['price']);
-  //           book.id = row['id'];
-  //           // books.push(b);
-  //           // }
-  //           resolve(book);
-  //         } else {
-  //           reject("No book found")
-  //         }
-  //
-  //       }, DatabaseService.errorHandler);
-  //     }
-  //
-  //     this.getDatabase().transaction(txFunction, DatabaseService.errorHandler, () => {
-  //       console.log('Success: select transaction successful');
-  //     });
-  //   });
-  // }
-  //
-  public selectAll(): Promise<any> {
+  public selectPokemon(id: number): Promise<any> {
+    let options = [id];
+    let pokemon: Pokemon = null;
+
+    return new Promise((resolve, reject) => {
+      function txFunction(tx) {
+        let sql = "SELECT * FROM pokemon WHERE id=?;";
+
+        tx.executeSql(sql, options, (tx, results) => {
+          if (results.rows.length > 0) {
+            let row = results.rows[0];
+            pokemon = new Pokemon(row['pokemon_name'], row['type'], row['hp']);
+            pokemon.id = row['id'];
+            resolve(pokemon);
+          } else {
+            reject("No pokemon found")
+          }
+        }, DatabaseService.errorHandler);
+      }
+
+      this.getDatabase().transaction(txFunction, DatabaseService.errorHandler, () => {
+        console.log('Success: select transaction successful');
+      });
+    });
+  }
+
+  public selectAllPokemon(): Promise<any> {
     let options = [];
-    let books: Pokemon[] = [];
+    let pokemons: Pokemon[] = [];
 
     return new Promise((resolve, reject) => {
       function txFunction(tx) {
@@ -184,9 +181,9 @@ export class DatabaseService {
               let row = results.rows[i];
               let p = new Pokemon(row['pokemon_name'], row['type'], row['hp']);
               p.id = row['id'];
-              books.push(p);
+              pokemons.push(p);
             }
-            resolve(books);
+            resolve(pokemons);
           } else {
             reject("No pokemons found")
           }
@@ -200,7 +197,7 @@ export class DatabaseService {
     });
   }
 
-  public delete(pokemon: Pokemon, callback) {
+  public deletePokemon(pokemon: Pokemon, callback) {
     function txFunction(tx: any) {
       var sql: string = 'DELETE FROM pokemon WHERE id=?;';
       var options = [pokemon.id];
@@ -213,16 +210,208 @@ export class DatabaseService {
     });
   }
 
-  // public update(book: Book, callback) {
-  //   function txFunction(tx: any) {
-  //     var sql: string = 'UPDATE books SET name=?, price=? WHERE id=?;';
-  //     var options = [book.name, book.price, book.id];
-  //
-  //     tx.executeSql(sql, options, callback, DatabaseService.errorHandler);
-  //   }
-  //
-  //   this.getDatabase().transaction(txFunction, DatabaseService.errorHandler, () => {
-  //     console.log('Success: update transaction successful');
-  //   });
-  // }
+  public updatePokemon(pokemon: Pokemon, callback) {
+    function txFunction(tx: any) {
+      var sql: string = 'UPDATE pokemon SET pokemon_name=?, type=?, hp=? WHERE id=?;';
+      var options = [pokemon.pokemonName, pokemon.type, pokemon.hp, pokemon.id];
+
+      tx.executeSql(sql, options, callback, DatabaseService.errorHandler);
+    }
+
+    this.getDatabase().transaction(txFunction, DatabaseService.errorHandler, () => {
+      console.log('Success: update transaction successful');
+    });
+  }
+
+  // crud operations for items
+  public insertItem(item: Item, callback) {
+    function txFunction(tx: any) {
+      var sql: string = 'INSERT INTO items(item_name, description) VALUES(?, ?);';
+      var options = [item.itemName, item.description];
+
+      tx.executeSql(sql, options, callback, DatabaseService.errorHandler);
+    }
+
+    this.getDatabase().transaction(txFunction, DatabaseService.errorHandler, () => {
+      console.log('Success: insert transaction successful');
+    });
+  }
+
+  public selectItem(id: number): Promise<any> {
+    let options = [id];
+    let item: Item = null;
+
+    return new Promise((resolve, reject) => {
+      function txFunction(tx) {
+        let sql = "SELECT * FROM items WHERE id=?;";
+
+        tx.executeSql(sql, options, (tx, results) => {
+          if (results.rows.length > 0) {
+            let row = results.rows[0];
+            item = new Item(row['item_name'], row['description']);
+            item.id = row['id'];
+            resolve(item);
+          } else {
+            reject("No items found")
+          }
+        }, DatabaseService.errorHandler);
+      }
+
+      this.getDatabase().transaction(txFunction, DatabaseService.errorHandler, () => {
+        console.log('Success: select transaction successful');
+      });
+    });
+  }
+
+  public selectAllItems(): Promise<any> {
+    let options = [];
+    let items: Item[] = [];
+
+    return new Promise((resolve, reject) => {
+      function txFunction(tx) {
+        let sql = "SELECT * FROM items;";
+
+        tx.executeSql(sql, options, (tx, results) => {
+          if (results.rows.length > 0) {
+            for (let i = 0; i < results.rows.length; i++) {
+              let row = results.rows[i];
+              let item = new Item(row['item_name'], row['description']);
+              item.id = row['id'];
+              items.push(item);
+            }
+            resolve(items);
+          } else {
+            reject("No items found")
+          }
+
+        }, DatabaseService.errorHandler);
+      }
+
+      this.getDatabase().transaction(txFunction, DatabaseService.errorHandler, () => {
+        console.log('Success: selectAll transaction successful');
+      });
+    });
+  }
+
+  public deleteItem(item: Item, callback) {
+    function txFunction(tx: any) {
+      var sql: string = 'DELETE FROM items WHERE id=?;';
+      var options = [item.id];
+
+      tx.executeSql(sql, options, callback, DatabaseService.errorHandler);
+    }
+
+    this.getDatabase().transaction(txFunction, DatabaseService.errorHandler, () => {
+      console.log('Success: delete transaction successful');
+    });
+  }
+
+  public updateItem(item: Item, callback) {
+    function txFunction(tx: any) {
+      var sql: string = 'UPDATE items SET item_name=?, description=? WHERE id=?;';
+      var options = [item.itemName, item.description, item.id];
+
+      tx.executeSql(sql, options, callback, DatabaseService.errorHandler);
+    }
+
+    this.getDatabase().transaction(txFunction, DatabaseService.errorHandler, () => {
+      console.log('Success: update transaction successful');
+    });
+  }
+
+  // crud operations for deck
+  public insertDeck(deck: Deck, callback) {
+    function txFunction(tx: any) {
+      var sql: string = 'INSERT INTO decks(deck_name, first_pokemon_id, second_pokemon_id, third_pokemon_id, item_id) VALUES(?, ?, ?, ?, ?);';
+      var options = [deck.deckName, deck.firstPokemonId, deck.secondPokemonId, deck.thirdPokemonId, deck.itemId];
+
+      tx.executeSql(sql, options, callback, DatabaseService.errorHandler);
+    }
+
+    this.getDatabase().transaction(txFunction, DatabaseService.errorHandler, () => {
+      console.log('Success: insert transaction successful');
+    });
+  }
+
+  public selectDeck(id: number): Promise<any> {
+    let options = [id];
+    let deck: Deck = null;
+
+    return new Promise((resolve, reject) => {
+      function txFunction(tx) {
+        let sql = "SELECT * FROM decks WHERE id=?;";
+
+        tx.executeSql(sql, options, (tx, results) => {
+          if (results.rows.length > 0) {
+            let row = results.rows[0];
+            deck = new Deck(row['deck_name'], row['first_pokemon_id'], row['second_pokemon_id'], row['third_pokemon_id'], row['item_id']);
+            deck.id = row['id'];
+            resolve(deck);
+          } else {
+            reject("No items found")
+          }
+        }, DatabaseService.errorHandler);
+      }
+
+      this.getDatabase().transaction(txFunction, DatabaseService.errorHandler, () => {
+        console.log('Success: select transaction successful');
+      });
+    });
+  }
+
+  public selectAllDecks(): Promise<any> {
+    let options = [];
+    let decks: Deck[] = [];
+
+    return new Promise((resolve, reject) => {
+      function txFunction(tx) {
+        let sql = "SELECT * FROM decks;";
+
+        tx.executeSql(sql, options, (tx, results) => {
+          if (results.rows.length > 0) {
+            for (let i = 0; i < results.rows.length; i++) {
+              let row = results.rows[i];
+              let deck = new Deck(row['deck_name'], row['first_pokemon_id'], row['second_pokemon_id'], row['third_pokemon_id'], row['item_id']);
+              deck.id = row['id'];
+              decks.push(deck);
+            }
+            resolve(decks);
+          } else {
+            reject("No items found")
+          }
+
+        }, DatabaseService.errorHandler);
+      }
+
+      this.getDatabase().transaction(txFunction, DatabaseService.errorHandler, () => {
+        console.log('Success: selectAll transaction successful');
+      });
+    });
+  }
+
+  public deleteDeck(deck: Deck, callback) {
+    function txFunction(tx: any) {
+      var sql: string = 'DELETE FROM decks WHERE id=?;';
+      var options = [deck.id];
+
+      tx.executeSql(sql, options, callback, DatabaseService.errorHandler);
+    }
+
+    this.getDatabase().transaction(txFunction, DatabaseService.errorHandler, () => {
+      console.log('Success: delete transaction successful');
+    });
+  }
+
+  public updateDeck(deck: Deck, callback) {
+    function txFunction(tx: any) {
+      var sql: string = 'UPDATE decks SET deck_name=?, first_pokemon_id=?, second_pokemon_id=?, third_pokemon_id=?, item_id=? WHERE id=?;';
+      var options = [deck.deckName, deck.firstPokemonId, deck.secondPokemonId, deck.thirdPokemonId, deck.itemId, deck.id];
+
+      tx.executeSql(sql, options, callback, DatabaseService.errorHandler);
+    }
+
+    this.getDatabase().transaction(txFunction, DatabaseService.errorHandler, () => {
+      console.log('Success: update transaction successful');
+    });
+  }
 }

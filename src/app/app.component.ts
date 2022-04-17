@@ -7,4 +7,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Angular Mobile App';
+  public static types: string[] = ['Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Psychic'];
 }

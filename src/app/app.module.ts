@@ -10,6 +10,15 @@ import { FooterComponent } from './footer/footer.component';
 import { DeckspageComponent } from './deckspage/deckspage.component';
 import { PokemonpageComponent } from './pokemonpage/pokemonpage.component';
 import { AddpokemonpageComponent } from './addpokemonpage/addpokemonpage.component';
+import { AdditemspageComponent } from './additemspage/additemspage.component';
+import { ItempageComponent } from './itempage/itempage.component';
+import { EditpokemonpageComponent } from './editpokemonpage/editpokemonpage.component';
+import { EdititemspageComponent } from './edititemspage/edititemspage.component';
+import { AdddeckspageComponent } from './adddeckspage/adddeckspage.component';
+import { EditdeckspageComponent } from './editdeckspage/editdeckspage.component';
+import { RecordspageComponent } from './recordspage/recordspage.component';
+import { AddrecordspageComponent } from './addrecordspage/addrecordspage.component';
+import { EditrecordspageComponent } from './editrecordspage/editrecordspage.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +28,16 @@ import { AddpokemonpageComponent } from './addpokemonpage/addpokemonpage.compone
     FooterComponent,
     DeckspageComponent,
     PokemonpageComponent,
-    AddpokemonpageComponent
+    AddpokemonpageComponent,
+    AdditemspageComponent,
+    ItempageComponent,
+    EditpokemonpageComponent,
+    EdititemspageComponent,
+    AdddeckspageComponent,
+    EditdeckspageComponent,
+    RecordspageComponent,
+    AddrecordspageComponent,
+    EditrecordspageComponent
   ],
   imports: [
     BrowserModule,

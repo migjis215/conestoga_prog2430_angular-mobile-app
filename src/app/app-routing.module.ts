@@ -4,6 +4,12 @@ import {HomepageComponent} from "./homepage/homepage.component";
 import {DeckspageComponent} from "./deckspage/deckspage.component";
 import {PokemonpageComponent} from "./pokemonpage/pokemonpage.component";
 import {AddpokemonpageComponent} from "./addpokemonpage/addpokemonpage.component";
+import {EditpokemonpageComponent} from "./editpokemonpage/editpokemonpage.component";
+import {AdditemspageComponent} from "./additemspage/additemspage.component";
+import {EdititemspageComponent} from "./edititemspage/edititemspage.component";
+import {ItempageComponent} from "./itempage/itempage.component";
+import {AdddeckspageComponent} from "./adddeckspage/adddeckspage.component";
+import {EditdeckspageComponent} from "./editdeckspage/editdeckspage.component";
 
 const routes: Routes = [
   { path: '', component: HomepageComponent },
@@ -11,7 +17,13 @@ const routes: Routes = [
   { path: 'decks', component: DeckspageComponent },
   { path: 'pokemon', component: PokemonpageComponent },
   { path: 'add-pokemon', component: AddpokemonpageComponent },
-  // { path: 'modify/:id', component: ModifypageComponent }
+  { path: 'edit-pokemon/:id', component: EditpokemonpageComponent },
+  { path: 'items', component: ItempageComponent },
+  { path: 'add-item', component: AdditemspageComponent },
+  { path: 'edit-item/:id', component: EdititemspageComponent },
+  { path: 'decks', component: DeckspageComponent },
+  { path: 'add-deck', component: AdddeckspageComponent },
+  { path: 'edit-deck/:id', component: EditdeckspageComponent }
 ];
 
 @NgModule({

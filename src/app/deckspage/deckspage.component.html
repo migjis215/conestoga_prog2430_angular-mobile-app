@@ -1,1 +1,50 @@
-<p>deckspage works!</p>
+<div class="d-flex justify-content-around m-2">
+  <h3>My Decks</h3>
+  <a class="btn btn-outline-secondary" routerLink="/add-deck">Add Decks</a>
+</div>
+
+<div class="container-fluid">
+  <div class="container">
+    <div class="row">
+      <div class="mb-3"
+           *ngFor="let deck of decks">
+        <div class="card box-shadow">
+          <div class="card-header">
+            {{ deck.deckName }}
+          </div>
+          <div class="card-body">
+            <div class="d-flex">
+              <div class="p-2 flex-grow-1">
+                <h2 class="card-title mb-3">
+                  {{ pokemons[deck.firstPokemonId - 1].pokemonName }}
+                </h2>
+                <h2 class="card-title mb-3">
+                  {{ pokemons[deck.secondPokemonId - 1].pokemonName }}
+                </h2>
+                <h2 class="card-title mb-3">
+                  {{ pokemons[deck.thirdPokemonId - 1].pokemonName }}
+                </h2>
+              </div>
+              <div class="p-2 d-flex align-items-end flex-column">
+                <h5 class="card-subtitle mt-2">
+                  <small class="text-muted">Item&nbsp;&nbsp;</small>{{ items[deck.itemId - 1].itemName }}
+                </h5>
+                <div class="btn-group-vertical mt-auto">
+                  <button type="button"
+                          class="btn btn-sm btn-outline-primary"
+                          style="height: 35px; width: 80px;"
+                          (click)="btnEditDeck_click(deck)">Edit</button>
+                  <button type="button"
+                          class="btn btn-sm btn-outline-danger"
+                          style="height: 35px; width: 80px;"
+                          (click)="btnDeleteDeck_click(deck)">Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
