@@ -4,45 +4,72 @@
       <h2>Add a Deck</h2>
     </div>
     <div class="card-body">
-      <form>
+      <form #myForm="ngForm">
         <div class="mb-3">
           <label for="txtDeckName"class="form-label">Deck Name</label>
           <input type="text" id="txtDeckName" name="txtDeckName"
-                 class="form-control" [(ngModel)]="deck.deckName" required>
+                 class="form-control" [(ngModel)]="deck.deckName"
+                 #deckName="ngModel" required>
+          <div *ngIf="deckName.invalid && (deckName.dirty || deckName.touched)">
+            <small *ngIf="deckName.errors['required']" class="text-danger">
+              Deck Name is required
+            </small>
+          </div>
         </div>
         <div class="mb-3">
           <label for="txtFirstPokemonId"class="form-label">First Pokemon</label>
           <select class="form-select" id="txtFirstPokemonId" name="txtFirstPokemonId"
-                  [(ngModel)]="deck.firstPokemonId" required>
+                  [(ngModel)]="deck.firstPokemonId" #firstPokemonId="ngModel" required>
             <option *ngFor="let pokemon of pokemons" value="{{ pokemon.id }}">{{ pokemon.pokemonName }}</option>
           </select>
+          <div *ngIf="firstPokemonId.invalid && (firstPokemonId.dirty || firstPokemonId.touched)">
+            <small *ngIf="firstPokemonId.errors['required']" class="text-danger">
+              Please select the First Pokemon
+            </small>
+          </div>
         </div>
         <div class="mb-3">
           <label for="txtSecondPokemonId"class="form-label">Second Pokemon</label>
           <select class="form-select" id="txtSecondPokemonId" name="txtSecondPokemonId"
-                  [(ngModel)]="deck.secondPokemonId" required>
+                  [(ngModel)]="deck.secondPokemonId" #secondPokemonId="ngModel" required>
             <option *ngFor="let pokemon of pokemons" value="{{ pokemon.id }}">{{ pokemon.pokemonName }}</option>
           </select>
+          <div *ngIf="secondPokemonId.invalid && (secondPokemonId.dirty || secondPokemonId.touched)">
+            <small *ngIf="secondPokemonId.errors['required']" class="text-danger">
+              Please select the Second Pokemon
+            </small>
+          </div>
         </div>
         <div class="mb-3">
           <label for="txtThirdPokemonId"class="form-label">Third Pokemon</label>
           <select class="form-select" id="txtThirdPokemonId" name="txtThirdPokemonId"
-                  [(ngModel)]="deck.thirdPokemonId" required>
+                  [(ngModel)]="deck.thirdPokemonId" #thirdPokemonId="ngModel" required>
             <option *ngFor="let pokemon of pokemons" value="{{ pokemon.id }}">{{ pokemon.pokemonName }}</option>
           </select>
+          <div *ngIf="thirdPokemonId.invalid && (thirdPokemonId.dirty || thirdPokemonId.touched)">
+            <small *ngIf="thirdPokemonId.errors['required']" class="text-danger">
+              Please select the Third Pokemon
+            </small>
+          </div>
         </div>
         <div class="mb-3">
           <label for="txtItemId"class="form-label">Item</label>
           <select class="form-select" id="txtItemId" name="txtItemId"
-                  [(ngModel)]="deck.itemId" required>
+                  [(ngModel)]="deck.itemId" #itemId="ngModel" required>
             <option *ngFor="let item of items" value="{{ item.id }}">{{ item.itemName }}</option>
           </select>
+          <div *ngIf="itemId.invalid && (itemId.dirty || itemId.touched)">
+            <small *ngIf="itemId.errors['required']" class="text-danger">
+              Please select the Item
+            </small>
+          </div>
         </div>
 
         <button type="button"
                 id="btnAddDeck"
                 name="btnAddDeck"
                 class="btn btn-primary"
+                [disabled]="myForm.invalid"
                 (click)="btnAddDeck_click()">
           Add
         </button>

@@ -4,7 +4,7 @@
       <h2>Add a Pokemon</h2>
     </div>
     <div class="card-body">
-      <form>
+      <form #myForm="ngForm">
         <div class="mb-3">
           <label for="txtPokemonName"class="form-label">Pokemon Name</label>
           <input type="text" id="txtPokemonName" name="txtPokemonName"
@@ -13,20 +13,31 @@
         <div class="mb-3">
           <label for="txtType"class="form-label">Type</label>
           <select class="form-select" id="txtType" name="txtType"
-                  [(ngModel)]="pokemon.type" required>
+                  [(ngModel)]="pokemon.type" #type="ngModel" required>
             <option *ngFor="let type of types" value="{{ type }}">{{ type }}</option>
           </select>
+          <div *ngIf="type.invalid && (type.dirty || type.touched)">
+            <small *ngIf="type.errors['required']" class="text-danger">
+              Type is required
+            </small>
+          </div>
         </div>
         <div class="mb-3">
           <label for="txtHp"class="form-label">HP</label>
           <input type="text" id="txtHp" name="txtHp"
-                 class="form-control" [(ngModel)]="pokemon.hp" required>
+                 class="form-control" [(ngModel)]="pokemon.hp" #hp="ngModel" required>
+          <div *ngIf="hp.invalid && (hp.dirty || hp.touched)">
+            <small *ngIf="hp.errors['required']" class="text-danger">
+              HP is required
+            </small>
+          </div>
         </div>
 
         <button type="button"
                 id="btnAddPokemon"
                 name="btnAddPokemon"
                 class="btn btn-primary"
+                [disabled]="myForm.invalid"
                 (click)="btnAddPokemon_click()">
           Add
         </button>

@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Pokemon} from "../models/pokemon.model";
 import {Item} from "../models/item.model";
 import {Deck} from "../models/deck.model";
+import {Record} from "../models/record.model";
 
 declare function openDatabase(shortName, version, displayName, dbSize, dbCreateSuccess): any;
 
@@ -63,6 +64,15 @@ export class DatabaseService {
         FOREIGN KEY (item_id) REFERENCES items(id));`;
       tx.executeSql(sql, options, () => {
         console.info("Success: create decks table successful");
+      }, DatabaseService.errorHandler);
+
+      sql = `CREATE TABLE IF NOT EXISTS records(
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        used_deck_id INTEGER NOT NULL,
+        is_winning_game INTEGER NOT NULL,
+        FOREIGN KEY (used_deck_id) REFERENCES decks(id));`;
+      tx.executeSql(sql, options, () => {
+        console.info("Success: create records table successful");
       }, DatabaseService.errorHandler)
     }
 
@@ -77,19 +87,21 @@ export class DatabaseService {
       var options = [];
 
       sql = "DROP TABLE IF EXISTS decks;";
-
       tx.executeSql(sql, options, () => {
         console.info("Success: DROP table successful");
       }, DatabaseService.errorHandler);
 
       sql = "DROP TABLE IF EXISTS items;";
-
       tx.executeSql(sql, options, () => {
         console.info("Success: DROP table successful");
       }, DatabaseService.errorHandler);
 
       sql = "DROP TABLE IF EXISTS pokemon;";
+      tx.executeSql(sql, options, () => {
+        console.info("Success: DROP table successful");
+      }, DatabaseService.errorHandler);
 
+      sql = "DROP TABLE IF EXISTS records;";
       tx.executeSql(sql, options, () => {
         console.info("Success: DROP table successful");
       }, DatabaseService.errorHandler)
@@ -406,6 +418,102 @@ export class DatabaseService {
     function txFunction(tx: any) {
       var sql: string = 'UPDATE decks SET deck_name=?, first_pokemon_id=?, second_pokemon_id=?, third_pokemon_id=?, item_id=? WHERE id=?;';
       var options = [deck.deckName, deck.firstPokemonId, deck.secondPokemonId, deck.thirdPokemonId, deck.itemId, deck.id];
+
+      tx.executeSql(sql, options, callback, DatabaseService.errorHandler);
+    }
+
+    this.getDatabase().transaction(txFunction, DatabaseService.errorHandler, () => {
+      console.log('Success: update transaction successful');
+    });
+  }
+
+  // crud operations for record
+  public insertRecord(record: Record, callback) {
+    function txFunction(tx: any) {
+      var sql: string = 'INSERT INTO records(used_deck_id, is_winning_game) VALUES(?, ?);';
+      var options = [record.usedDeckId, record.isWinningGame];
+
+      tx.executeSql(sql, options, callback, DatabaseService.errorHandler);
+    }
+
+    this.getDatabase().transaction(txFunction, DatabaseService.errorHandler, () => {
+      console.log('Success: insert transaction successful');
+    });
+  }
+
+  public selectRecord(id: number): Promise<any> {
+    let options = [id];
+    let record: Record = null;
+
+    return new Promise((resolve, reject) => {
+      function txFunction(tx) {
+        let sql = "SELECT * FROM records WHERE id=?;";
+
+        tx.executeSql(sql, options, (tx, results) => {
+          if (results.rows.length > 0) {
+            let row = results.rows[0];
+            record = new Record(row['used_deck_id'], row['is_winning_game']);
+            record.id = row['id'];
+            resolve(record);
+          } else {
+            reject("No records found")
+          }
+        }, DatabaseService.errorHandler);
+      }
+
+      this.getDatabase().transaction(txFunction, DatabaseService.errorHandler, () => {
+        console.log('Success: select transaction successful');
+      });
+    });
+  }
+
+  public selectAllRecords(): Promise<any> {
+    let options = [];
+    let records: Record[] = [];
+
+    return new Promise((resolve, reject) => {
+      function txFunction(tx) {
+        let sql = "SELECT * FROM records;";
+
+        tx.executeSql(sql, options, (tx, results) => {
+          if (results.rows.length > 0) {
+            for (let i = 0; i < results.rows.length; i++) {
+              let row = results.rows[i];
+              let record = new Record(row['used_deck_id'], row['is_winning_game']);
+              record.id = row['id'];
+              records.push(record);
+            }
+            resolve(records);
+          } else {
+            reject("No records found")
+          }
+
+        }, DatabaseService.errorHandler);
+      }
+
+      this.getDatabase().transaction(txFunction, DatabaseService.errorHandler, () => {
+        console.log('Success: selectAll transaction successful');
+      });
+    });
+  }
+
+  public deleteRecord(record: Record, callback) {
+    function txFunction(tx: any) {
+      var sql: string = 'DELETE FROM records WHERE id=?;';
+      var options = [record.id];
+
+      tx.executeSql(sql, options, callback, DatabaseService.errorHandler);
+    }
+
+    this.getDatabase().transaction(txFunction, DatabaseService.errorHandler, () => {
+      console.log('Success: delete transaction successful');
+    });
+  }
+
+  public updateRecord(record: Record, callback) {
+    function txFunction(tx: any) {
+      var sql: string = 'UPDATE records SET used_deck_id=?, is_winning_game=? WHERE id=?;';
+      var options = [record.usedDeckId, record.isWinningGame, record.id];
 
       tx.executeSql(sql, options, callback, DatabaseService.errorHandler);
     }

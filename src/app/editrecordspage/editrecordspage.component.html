@@ -1,1 +1,41 @@
-<p>editrecordspage works!</p>
+<div class="m-4">
+  <div class="card">
+    <div class="card-header">
+      <h2>Edit an Record</h2>
+    </div>
+    <div class="card-body">
+      <form #myForm="ngForm">
+        <div class="mb-3">
+          <label for="txtDeckName" class="form-label">Used Deck</label>
+          <select class="form-select" id="txtDeckName" name="txtDeckName"
+                  [(ngModel)]="record.usedDeckId" required>
+            <option *ngFor="let deck of decks" value="{{ deck.id }}">{{ deck.deckName }}</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <div class="form-check form-check-inline">
+            <input [checked]="record.isWinningGame == 1"
+                   class="form-check-input" type="radio" name="wonOrLost" id="radioWon" value="1"
+                   [(ngModel)]="record.isWinningGame">
+            <label class="form-check-label" for="radioWon">WON</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input [checked]="record.isWinningGame == 0"
+                   class="form-check-input" id="radioLost" name="wonOrLost"
+                   type="radio" value="0">
+            <label class="form-check-label" for="radioLost">LOST</label>
+          </div>
+        </div>
+
+        <button type="button"
+                id="btnUpdateRecord"
+                name="btnUpdateRecord"
+                class="btn btn-primary"
+                (click)="btnUpdateRecord_click()">
+          Add
+        </button>
+      </form>
+    </div>
+    <div class="card-footer">{{myForm.value | json}}</div>
+  </div>
+</div>

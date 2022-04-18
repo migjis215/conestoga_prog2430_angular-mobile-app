@@ -1,1 +1,44 @@
-<p>recordspage works!</p>
+<div class="d-flex justify-content-around m-2">
+  <h3>Battle Records</h3>
+  <a class="btn btn-outline-secondary" routerLink="/add-record">Add Records</a>
+</div>
+
+<div class="container-fluid">
+  <div class="container">
+    <div class="row">
+      <div class="my-3" *ngFor="let record of records">
+        <div class="card box-shadow">
+          <div class="card-header text-center">
+            <h3 *ngIf="record.isWinningGame == 1">WON</h3>
+            <h3 *ngIf="record.isWinningGame == 0">LOST</h3>
+          </div>
+          <div class="card-body">
+            <div class="d-flex">
+              <div class="p-2 flex-grow-1">
+                <h3 class="card-title mb-3">
+                  <small class="text-muted">Used Deck &nbsp;&nbsp;</small>{{ decks[record.usedDeckId - 1].deckName }}
+                </h3>
+              </div>
+              <div class="p-2 d-flex align-items-end">
+                <div class="btn-group-vertical">
+<!--                  <button type="button"-->
+<!--                          class="btn btn-sm btn-outline-primary"-->
+<!--                          style="height: 35px; width: 80px;"-->
+<!--                          (click)="btnEditRecord_click(record)">Edit-->
+<!--                  </button>-->
+                  <button type="button"
+                          class="btn btn-sm btn-outline-danger"
+                          style="height: 35px; width: 80px;"
+                          (click)="btnDeleteRecord_click(record)">Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+            <img class="img-fluid rounded mx-auto d-block" src="assets/img/records.png" alt="Records"
+                 style="height: 225px; display: block;">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

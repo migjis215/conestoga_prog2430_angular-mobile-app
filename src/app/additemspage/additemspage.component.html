@@ -4,22 +4,33 @@
       <h2>Add an Item</h2>
     </div>
     <div class="card-body">
-      <form>
+      <form #myForm="ngForm">
         <div class="mb-3">
           <label for="txtItemName"class="form-label">Item Name</label>
           <input type="text" id="txtItemName" name="txtItemName"
-                 class="form-control" [(ngModel)]="item.itemName" required>
+                 class="form-control" [(ngModel)]="item.itemName" #itemName="ngModel" required>
+          <div *ngIf="itemName.invalid && (itemName.dirty || itemName.touched)">
+            <small *ngIf="itemName.errors['required']" class="text-danger">
+              Item Name is required
+            </small>
+          </div>
         </div>
         <div class="mb-3">
           <label for="txtDescription"class="form-label">Description</label>
           <textarea class="form-control" id="txtDescription" name="txtDescription"
-                    [(ngModel)]="item.description" required></textarea>
+                    [(ngModel)]="item.description" #description="ngModel" required></textarea>
+          <div *ngIf="description.invalid && (description.dirty || description.touched)">
+            <small *ngIf="description.errors['required']" class="text-danger">
+              Description is required
+            </small>
+          </div>
         </div>
 
         <button type="button"
                 id="btnAddItem"
                 name="btnAddItem"
                 class="btn btn-primary"
+                [disabled]="myForm.invalid"
                 (click)="btnAddItem_click()">
           Add
         </button>

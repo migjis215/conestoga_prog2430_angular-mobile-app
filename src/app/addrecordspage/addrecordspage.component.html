@@ -1,1 +1,47 @@
-<p>addrecordspage works!</p>
+<div class="m-4">
+  <div class="card">
+    <div class="card-header">
+      <h2>Add an Record</h2>
+    </div>
+    <div class="card-body">
+      <form #myForm="ngForm">
+        <div class="mb-3">
+          <label for="txtDeckName" class="form-label">Used Deck</label>
+          <select class="form-select" id="txtDeckName" name="txtDeckName"
+                  [(ngModel)]="record.usedDeckId" #usedDeckId="ngModel" required>
+            <option *ngFor="let deck of decks" value="{{ deck.id }}">{{ deck.deckName }}</option>
+          </select>
+          <div *ngIf="usedDeckId.invalid && (usedDeckId.dirty || usedDeckId.touched)">
+            <small *ngIf="usedDeckId.errors['required']" class="text-danger">
+              Comment is required
+            </small>
+          </div>
+        </div>
+        <div class="mb-3">
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="wonOrLost" id="radioWon" value="1" [(ngModel)]="record.isWinningGame" #isWinningGame="ngModel">
+            <label class="form-check-label" for="radioWon">WON</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="wonOrLost" id="radioLost" value="0" [(ngModel)]="record.isWinningGame" #isWinningGame="ngModel">
+            <label class="form-check-label" for="radioLost">LOST</label>
+          </div>
+          <div *ngIf="isWinningGame.invalid && (isWinningGame.dirty || isWinningGame.touched)">
+            <small *ngIf="isWinningGame.errors['required']" class="text-danger">
+              Please choose "Won" or "Lost"
+            </small>
+          </div>
+        </div>
+
+        <button type="button"
+                id="btnAddItem"
+                name="btnAddItem"
+                class="btn btn-primary"
+                [disabled]="myForm.invalid"
+                (click)="btnAddRecord_click()">
+          Add
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

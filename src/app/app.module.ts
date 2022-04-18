@@ -19,6 +19,10 @@ import { EditdeckspageComponent } from './editdeckspage/editdeckspage.component'
 import { RecordspageComponent } from './recordspage/recordspage.component';
 import { AddrecordspageComponent } from './addrecordspage/addrecordspage.component';
 import { EditrecordspageComponent } from './editrecordspage/editrecordspage.component';
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatInputModule} from "@angular/material/input";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [

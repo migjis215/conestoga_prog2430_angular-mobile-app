@@ -10,6 +10,9 @@ import {EdititemspageComponent} from "./edititemspage/edititemspage.component";
 import {ItempageComponent} from "./itempage/itempage.component";
 import {AdddeckspageComponent} from "./adddeckspage/adddeckspage.component";
 import {EditdeckspageComponent} from "./editdeckspage/editdeckspage.component";
+import {RecordspageComponent} from "./recordspage/recordspage.component";
+import {AddrecordspageComponent} from "./addrecordspage/addrecordspage.component";
+import {EditrecordspageComponent} from "./editrecordspage/editrecordspage.component";
 
 const routes: Routes = [
   { path: '', component: HomepageComponent },
@@ -23,7 +26,10 @@ const routes: Routes = [
   { path: 'edit-item/:id', component: EdititemspageComponent },
   { path: 'decks', component: DeckspageComponent },
   { path: 'add-deck', component: AdddeckspageComponent },
-  { path: 'edit-deck/:id', component: EditdeckspageComponent }
+  { path: 'edit-deck/:id', component: EditdeckspageComponent },
+  { path: 'records', component: RecordspageComponent },
+  { path: 'add-record', component: AddrecordspageComponent },
+  { path: 'edit-record/:id', component: EditrecordspageComponent }
 ];
 
 @NgModule({
